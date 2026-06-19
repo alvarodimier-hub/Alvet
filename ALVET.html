@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALVET — Medicina veterinaria</title>
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCIgdmlld0JveD0iMCAwIDI0MCAyNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJBTFZFVCI+CiAgPHJlY3Qgd2lkdGg9IjI0MCIgaGVpZ2h0PSIyNDAiIHJ4PSI0NCIgZmlsbD0iIzNGNkY1RSIvPgogIDx0ZXh0IHg9IjEyMCIgeT0iMTIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCIKICAgICAgICBmb250LWZhbWlseT0iJ0lvd2FuIE9sZCBTdHlsZScsJ1BhbGF0aW5vIExpbm90eXBlJyxQYWxhdGlubyxHZW9yZ2lhLHNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iNjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSI0IiBmaWxsPSIjRkZGRkZGIj5BTFZFVDwvdGV4dD4KPC9zdmc+Cg==">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3F6F5E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ALVET">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 /* ===========================================================
    ALVET — tokens
@@ -1550,6 +1557,11 @@ gastoListEl.addEventListener("click", (e) => {
 renderCases();
 renderCalendar();
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch((err) => console.error("SW error", err));
+  });
+}
 </script>
 </body>
 </html>
