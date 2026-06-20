@@ -830,6 +830,25 @@ input:focus-visible{
 }
 .btn-ghost:hover{ border-color: var(--green); color: var(--green-dark); }
 
+/* ===========================================================
+   FACTURACIÓN
+   =========================================================== */
+.btn-facturar{
+  font-family: var(--font-body); font-size: 12.5px; font-weight: 700;
+  background: #2B6CB0; color: #fff; border: none;
+  border-radius: 999px; padding: 8px 14px; cursor: pointer; white-space: nowrap;
+  transition: background .15s ease;
+}
+.btn-facturar:hover{ background: #225a96; }
+
+.fact-badge{
+  font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+  text-transform: uppercase; letter-spacing: 0.03em;
+  background: #DCECFF; color: #2B6CB0;
+}
+.fac-card.is-facturada{ opacity: 0.85; border-left: 4px solid #2B6CB0; }
+.fac-card{ border-left: 4px solid #9DB8B2; }
+
 </style>
 </head>
 <body>
@@ -877,6 +896,7 @@ input:focus-visible{
 <nav class="tabs" role="tablist" aria-label="Secciones">
   <button class="tab-btn active" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
   <button class="tab-btn" role="tab" data-tab="balance" aria-selected="false">Balance</button>
+  <button class="tab-btn" role="tab" data-tab="facturacion" aria-selected="false">Facturación</button>
 </nav>
 
 <main class="page">
@@ -1039,6 +1059,46 @@ input:focus-visible{
 
   </div>
 
+  <!-- ========================= PANEL FACTURACIÓN ========================= -->
+  <div class="tab-panel" data-panel="facturacion" hidden>
+
+    <div class="insumo-summary">
+      <div class="insumo-stat">
+        <span class="v" id="facPendientes">0</span>
+        <span class="l">por facturar</span>
+      </div>
+      <div class="insumo-stat pay-tr">
+        <span class="v" id="facMontoPend">$0</span>
+        <span class="l">monto pendiente</span>
+      </div>
+      <div class="insumo-stat">
+        <span class="v" id="facHechas">0</span>
+        <span class="l">facturadas</span>
+      </div>
+    </div>
+
+    <div class="balance-controls">
+      <h2><span class="eyebrow">Transferencias</span>Cirugías a facturar</h2>
+      <p class="balance-note">Aparecen las cirugías <strong>hechas y cobradas por transferencia</strong>. Tocá <strong>Facturada</strong> cuando hagas la factura.</p>
+    </div>
+
+    <div class="agenda-toolbar">
+      <div class="filter-pills" id="facFilterPills">
+        <button class="filter-pill active" data-fac-filter="pendientes">Por facturar</button>
+        <button class="filter-pill" data-fac-filter="facturadas">Facturadas</button>
+        <button class="filter-pill" data-fac-filter="todas">Todas</button>
+      </div>
+    </div>
+
+    <div id="facEmpty" class="empty-state" hidden>
+      <p class="empty-title">No hay cirugías para facturar</p>
+      <p class="empty-sub">Cuando marques una cirugía como cobrada por transferencia, aparece acá.</p>
+    </div>
+
+    <ul id="facList" class="case-list"></ul>
+
+  </div>
+
 </main>
 
 <footer class="site-footer">
@@ -1193,6 +1253,7 @@ tabBtns.forEach((btn) => {
     });
     panels.forEach((p) => { p.hidden = p.dataset.panel !== tab; });
     if (tab === "balance") renderBalance();
+    if (tab === "facturacion") renderFacturacion();
   });
 });
 
@@ -1452,6 +1513,98 @@ function renderBalance() {
       </li>`;
   }).join("");
 }
+
+/* ===========================================================
+   FACTURACIÓN (cirugías hechas + pago transferencia)
+   =========================================================== */
+const facListEl = document.getElementById("facList");
+const facEmptyEl = document.getElementById("facEmpty");
+const facPendientesEl = document.getElementById("facPendientes");
+const facMontoPendEl = document.getElementById("facMontoPend");
+const facHechasEl = document.getElementById("facHechas");
+const facFilterPills = document.getElementById("facFilterPills");
+
+let facFilter = "pendientes";
+
+function facturables() {
+  // Hechos + cobrados por transferencia
+  return turnosStore.getAll().filter((t) => t.estado === "hecho" && t.pago === "transferencia");
+}
+
+function renderFacturacion() {
+  const all = facturables();
+  const pend = all.filter((t) => !t.facturada);
+  const hechas = all.filter((t) => t.facturada);
+
+  facPendientesEl.textContent = pend.length;
+  facMontoPendEl.textContent = formatMoney(pend.reduce((s, t) => s + (Number(t.honorarios) || 0), 0));
+  facHechasEl.textContent = hechas.length;
+
+  let list;
+  if (facFilter === "pendientes") list = pend;
+  else if (facFilter === "facturadas") list = hechas;
+  else list = all;
+
+  // ordenar por fecha descendente
+  list = [...list].sort((a, b) => b.fecha.localeCompare(a.fecha));
+
+  if (all.length === 0) {
+    facEmptyEl.hidden = false;
+    facListEl.innerHTML = "";
+    return;
+  }
+  facEmptyEl.hidden = true;
+
+  if (list.length === 0) {
+    facListEl.innerHTML = `<li class="no-results">No hay cirugías en esta vista.</li>`;
+    return;
+  }
+
+  facListEl.innerHTML = list.map((t) => {
+    const { day, month } = formatDateParts(t.fecha);
+    const fact = !!t.facturada;
+    return `
+      <li class="case-card fac-card ${fact ? "is-facturada" : ""}" data-id="${t.id}">
+        <div class="case-date"><span class="day">${day}</span><span class="month">${month}</span></div>
+        <div class="case-main">
+          <p class="case-procedimiento">${escapeHtml(t.procedimiento)}</p>
+          <div class="case-meta"><span>${escapeHtml(t.paciente)}</span>${t.veterinaria ? `<span>·</span><span>${escapeHtml(t.veterinaria)}</span>` : ""}</div>
+          <div class="turno-badges">
+            ${fact ? `<span class="fact-badge">✓ Facturada</span>` : `<span class="estado-badge programado">Por facturar</span>`}
+          </div>
+        </div>
+        <div class="case-right">
+          <span class="case-monto">${formatMoney(t.honorarios)}</span>
+          ${fact
+            ? `<button class="btn-revert" data-action="desfacturar" data-id="${t.id}" title="Desmarcar facturada">↺</button>`
+            : `<button class="btn-facturar" data-action="facturar" data-id="${t.id}">Facturada</button>`}
+        </div>
+      </li>`;
+  }).join("");
+}
+
+facListEl.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-action]");
+  if (!btn) return;
+  const id = btn.dataset.id, action = btn.dataset.action;
+  if (action === "facturar") {
+    turnosStore.update(id, { facturada: true });
+    renderFacturacion();
+    showToast("Marcada como facturada");
+  } else if (action === "desfacturar") {
+    turnosStore.update(id, { facturada: false });
+    renderFacturacion();
+    showToast("Volvió a pendiente de facturar");
+  }
+});
+
+facFilterPills.addEventListener("click", (e) => {
+  const pill = e.target.closest(".filter-pill");
+  if (!pill) return;
+  facFilter = pill.dataset.facFilter;
+  facFilterPills.querySelectorAll(".filter-pill").forEach((p) => p.classList.toggle("active", p === pill));
+  renderFacturacion();
+});
 
 /* ===========================================================
    Init
