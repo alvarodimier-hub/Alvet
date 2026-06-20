@@ -1,26 +1,15 @@
 {
   "name": "ALVET — Medicina veterinaria",
   "short_name": "ALVET",
-  "description": "Registro de cirugías, anestesias, calendario e insumos para medicina veterinaria.",
+  "description": "Agenda de turnos quirúrgicos y balance de honorarios veterinarios.",
   "start_url": "./ALVET.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#F7F4EE",
-  "theme_color": "#3F6F5E",
-  "lang": "es",
+  "orientation": "portrait",
+  "background_color": "#F2FBF8",
+  "theme_color": "#34B79F",
   "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
