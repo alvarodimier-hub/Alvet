@@ -1598,17 +1598,18 @@ input:focus-visible{
         <h2 id="turnoTitle"><span class="eyebrow">Nuevo turno</span>Programar cirugía</h2>
 
         <form id="turnoForm" novalidate>
+
+          <div class="field">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" required>
+          </div>
+
+          <div class="field">
+            <label for="hora">Hora (opcional)</label>
+            <input type="time" id="hora" name="hora">
+          </div>
+
           <div class="field-grid">
-
-            <div class="field">
-              <label for="fecha">Fecha</label>
-              <input type="date" id="fecha" name="fecha" required>
-            </div>
-
-            <div class="field">
-              <label for="hora">Hora (opcional)</label>
-              <input type="time" id="hora" name="hora">
-            </div>
 
             <div class="field field-wide">
               <label for="paciente">Paciente</label>
@@ -1853,11 +1854,12 @@ input:focus-visible{
       <div class="field">
         <label for="inf-drug-select">Fármaco</label>
         <select id="inf-drug-select" class="inf-select inf-drug-select">
+          <option value="remifentanilo">Remifentanilo</option>
           <option value="propofol">Propofol</option>
           <option value="ketamina">Ketamina</option>
           <option value="dexmed">Dexmedetomidina</option>
-          <option value="fentanilo">Fentanilo</option>
-          <option value="remifentanilo">Remifentanilo</option>
+          <option value="medetomidina">Medetomidina</option>
+          <option value="lidocaina">Lidocaína</option>
           <option value="noradrenalina">Noradrenalina</option>
           <option value="dopamina">Dopamina</option>
           <option value="dobutamina">Dobutamina</option>
@@ -2857,14 +2859,15 @@ facFilterPills.addEventListener("click", (e) => {
 
 // Fármacos preconfigurados: unidad sugerida y nombre completo
 const DRUGS = {
-  propofol:      { nombre: "Propofol",          unidad: "mcg_kg_min" },
-  ketamina:      { nombre: "Ketamina",           unidad: "mcg_kg_min" },
-  dexmed:        { nombre: "Dexmedetomidina",    unidad: "mcg_kg_h"   },
-  fentanilo:     { nombre: "Fentanilo",          unidad: "mcg_kg_min" },
   remifentanilo: { nombre: "Remifentanilo",      unidad: "mcg_kg_min" },
-  noradrenalina: { nombre: "Noradrenalina",      unidad: "mcg_kg_min" },
-  dopamina:      { nombre: "Dopamina",           unidad: "mcg_kg_min" },
-  dobutamina:    { nombre: "Dobutamina",         unidad: "mcg_kg_min" },
+  propofol:      { nombre: "Propofol",            unidad: "mcg_kg_min" },
+  ketamina:      { nombre: "Ketamina",            unidad: "mcg_kg_min" },
+  dexmed:        { nombre: "Dexmedetomidina",     unidad: "mcg_kg_h"   },
+  medetomidina:  { nombre: "Medetomidina",        unidad: "mcg_kg_h"   },
+  lidocaina:     { nombre: "Lidocaína",           unidad: "mcg_kg_min" },
+  noradrenalina: { nombre: "Noradrenalina",       unidad: "mcg_kg_min" },
+  dopamina:      { nombre: "Dopamina",            unidad: "mcg_kg_min" },
+  dobutamina:    { nombre: "Dobutamina",          unidad: "mcg_kg_min" },
 };
 
 let activeDrug = "propofol";
