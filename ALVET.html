@@ -1349,6 +1349,21 @@ input:focus-visible{
 [data-theme="dark"]  .brand-logo-light { display: none; }
 [data-theme="dark"]  .brand-logo-dark  { display: flex; }
 
+/* Separador entre calculadora y tabla de dosis */
+.inf-dosis-sep{
+  display: flex; align-items: center; gap: 10px;
+  margin: 28px 0 18px;
+}
+.inf-dosis-sep::before,
+.inf-dosis-sep::after{
+  content: ""; flex: 1; height: 1px; background: var(--line-strong);
+}
+.inf-dosis-sep-label{
+  font-family: var(--font-display); font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em; color: var(--green-dark);
+  white-space: nowrap;
+}
+
 </style>
 </head>
 <body>
@@ -1481,8 +1496,7 @@ input:focus-visible{
   <button class="tab-btn active" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
   <button class="tab-btn" role="tab" data-tab="balance" aria-selected="false">Balance</button>
   <button class="tab-btn" role="tab" data-tab="facturacion" aria-selected="false">Facturación</button>
-  <button class="tab-btn" role="tab" data-tab="infusiones" aria-selected="false">Infusiones</button>
-  <button class="tab-btn" role="tab" data-tab="dosis" aria-selected="false">Dosis</button>
+  <button class="tab-btn" role="tab" data-tab="infusiones" aria-selected="false">Infusiones / Dosis</button>
 </nav>
 
 <main class="page">
@@ -1811,13 +1825,12 @@ input:focus-visible{
       <ul id="inf-historial" class="inf-hist-list"></ul>
     </div>
 
-  </div>
+    <!-- Separador entre calculadora y tabla de dosis -->
+    <div class="inf-dosis-sep">
+      <span class="inf-dosis-sep-label">Rangos de referencia CRI</span>
+    </div>
 
-  <!-- ========================= PANEL DOSIS ========================= -->
-  <div class="tab-panel" data-panel="dosis" hidden>
-
-    <div class="inf-header">
-      <h2><span class="eyebrow">Referencia rápida</span>Rangos de dosis CRI</h2>
+    <div class="inf-header" style="margin-top:4px">
       <p class="inf-disclaimer">⚠️ Valores de referencia orientativos. Verificá siempre según el paciente y la fuente. Tocá cualquier valor para editarlo.</p>
     </div>
 
