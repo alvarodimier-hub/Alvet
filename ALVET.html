@@ -1058,8 +1058,9 @@ input:focus-visible{
 .inf-drug.active{ background: var(--green-tint); border-color: var(--green); color: var(--green-dark); font-weight: 700; }
 
 /* Dosis + unidad en una línea */
-.inf-dosis-wrap{ display:flex; gap: 8px; }
-.inf-dosis-wrap input{ flex: 1; }
+.inf-dosis-wrap{ display:flex; gap: 8px; align-items: stretch; }
+.inf-dosis-wrap input{ flex: 1; min-width: 0; }
+.inf-unidad-select{ flex-shrink: 0; width: auto; min-width: 120px; max-width: 150px; }
 .inf-select{
   font-family: var(--font-body); font-size: 13.5px; font-weight: 600;
   padding: 10px 10px; border: 1px solid var(--line-strong);
@@ -1866,7 +1867,7 @@ input:focus-visible{
         </select>
       </div>
 
-      <div class="field-grid" style="margin-top:18px">
+      <div style="margin-top:18px">
 
         <div class="field">
           <label for="inf-peso">Peso del paciente (kg)</label>
@@ -1877,7 +1878,7 @@ input:focus-visible{
           <label for="inf-dosis">Dosis deseada</label>
           <div class="inf-dosis-wrap">
             <input type="number" id="inf-dosis" placeholder="Ej: 0.2" min="0" step="any">
-            <select id="inf-unidad" class="inf-select">
+            <select id="inf-unidad" class="inf-select inf-unidad-select">
               <option value="mcg_kg_min">mcg/kg/min</option>
               <option value="mcg_kg_h">mcg/kg/h</option>
               <option value="mg_kg_h">mg/kg/h</option>
@@ -1890,7 +1891,7 @@ input:focus-visible{
           <label for="inf-mg">Fármaco en la dilución</label>
           <div class="inf-dosis-wrap">
             <input type="number" id="inf-mg" placeholder="Ej: 200" min="0" step="any">
-            <select id="inf-mg-unidad" class="inf-select">
+            <select id="inf-mg-unidad" class="inf-select inf-unidad-select">
               <option value="mg">mg</option>
               <option value="mcg">µg</option>
             </select>
