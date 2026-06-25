@@ -17,31 +17,38 @@
    ALVET — tokens
    =========================================================== */
 :root{
-  /* Tema clásico — claro y cálido */
-  --ink:        #1C1B19;
-  --ink-soft:   #514E48;
-  --paper:      #F7F4EE;
-  --paper-raised: #FFFFFF;
-  --line:       #E4DFD3;
-  --line-strong:#CFC8B6;
-  --surface-2:  #F7F4EE;
-  --green:      #3F6F5E;
-  --green-dark: #2D5247;
-  --green-tint: #E7EFEA;
-  --coral:      #C8694F;
-  --coral-tint: #F6E7E1;
-  --amber:      #B07B16;
-  --amber-tint: #FFF3D6;
-  --violet:     #6B4FA0;
-  --violet-tint:#EDE8F6;
-  --blue:       #2B6CB0;
-  --blue-tint:  #DCECFF;
+  /* Tema clásico — mint / teal */
+  --ink:          #1A2820;   /* texto principal oscuro */
+  --ink-soft:     #607870;   /* texto secundario */
+  --paper:        #EEF8F4;   /* fondo base — mint muy suave */
+  --paper-raised: #FFFFFF;   /* tarjetas — blanco puro */
+  --line:         #C5E4DA;   /* bordes generales */
+  --line-strong:  #8FCDBE;   /* bordes inputs teal suave */
+
+  --surface-2:    #EAF6F2;   /* inputs — mint claro */
+
+  --green:        #2E9E85;   /* teal/mint acento principal */
+  --green-dark:   #1C6E5A;   /* teal profundo */
+  --green-tint:   #D4F0E8;   /* fondo tenue mint */
+
+  --coral:        #C8694F;
+  --coral-tint:   #F6E7E1;
+
+  --amber:        #B07B16;
+  --amber-tint:   #FFF3D6;
+  --violet:       #6B4FA0;
+  --violet-tint:  #EDE8F6;
+  --blue:         #2B6CB0;
+  --blue-tint:    #DCECFF;
+
   --font-display: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
   --font-body:    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --radius-s: 6px;
-  --radius-m: 12px;
-  --radius-l: 20px;
-  --shadow-card: 0 1px 2px rgba(28,27,25,0.04), 0 8px 24px -12px rgba(28,27,25,0.12);
+
+  --radius-s: 10px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+
+  --shadow-card: 0 1px 3px rgba(26,46,42,0.05), 0 8px 24px -12px rgba(26,46,42,0.10);
 }
 
 /* Tema oscuro — Monitor de quirófano */
@@ -85,7 +92,7 @@ body{
 .bg-grain{
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(28,27,25,0.035) 1px, transparent 0);
+    radial-gradient(circle at 1px 1px, rgba(58,154,130,0.04) 1px, transparent 0);
   background-size: 22px 22px;
   opacity: .6;
 }
@@ -98,7 +105,7 @@ a{ color: inherit; }
 .site-header{
   position: relative; z-index: 1;
   border-bottom: 1px solid var(--line);
-  background: linear-gradient(120deg, #DAF4EE 0%, #E8F8F1 50%, #FFF3EC 100%);
+  background: linear-gradient(120deg, #C8EEE5 0%, #E0F6F0 45%, #FFF0E8 100%);
   overflow: hidden;
 }
 .ecg-line{
@@ -1214,7 +1221,7 @@ input:focus-visible{
 
 /* Tooltip del gráfico */
 .anual-tooltip{
-  margin-top: 12px; background: var(--green-tint); border: 1px solid #B5D4C8;
+  margin-top: 12px; background: var(--green-tint); border: 1px solid var(--line-strong);
   border-radius: var(--radius-m); padding: 10px 14px; text-align: center;
   display: flex; flex-direction: column; gap: 2px; align-items: center;
 }
@@ -1364,6 +1371,73 @@ input:focus-visible{
   white-space: nowrap;
 }
 
+/* Fila de botones de la calculadora de infusiones */
+.inf-btn-row{ display: flex; gap: 10px; margin-top: 18px; }
+.inf-btn-row .inf-btn{ flex: 1; margin-top: 0; }
+.inf-btn-borrar{
+  flex-shrink: 0; padding: 14px 22px; font-size: 15px;
+}
+
+/* Selector de fármaco (dropdown) */
+.inf-drug-select{
+  width: 100%; font-size: 15px; padding: 10px 12px;
+  border-radius: var(--radius-s); border: 1px solid var(--line-strong);
+  background: var(--surface-2); color: var(--ink);
+  font-family: var(--font-body); font-weight: 600;
+  cursor: pointer; color-scheme: light;
+}
+[data-theme="dark"] .inf-drug-select{ color-scheme: dark; }
+
+/* ===========================================================
+   PANEL DE EDICIÓN INLINE EN TURNO
+   =========================================================== */
+.turno-edit-panel{
+  grid-column: 1 / -1;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1.5px dashed var(--line-strong);
+  animation: slideDown .18s ease;
+}
+@keyframes slideDown{
+  from{ opacity:0; transform:translateY(-6px); }
+  to{   opacity:1; transform:translateY(0); }
+}
+/* El card necesita flex-wrap para que el panel ocupe el ancho completo */
+.turno-card{
+  flex-wrap: wrap;
+}
+
+.turno-edit-grid{
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
+}
+.turno-edit-field{ display: flex; flex-direction: column; gap: 5px; }
+.turno-edit-field.full{ grid-column: 1 / -1; }
+.turno-edit-field label{
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--ink-soft);
+}
+.turno-edit-field input{
+  padding: 9px 11px; border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s); background: var(--surface-2);
+  font-size: 14px; color: var(--ink); width: 100%;
+}
+.turno-edit-field input:focus-visible{
+  outline: none; border-color: var(--green); box-shadow: 0 0 0 2px var(--green-tint);
+}
+.turno-edit-actions{ display: flex; gap: 8px; }
+.turno-edit-save{ flex: 1; padding: 11px; font-size: 14px; }
+.turno-edit-cancel{ padding: 11px 16px; font-size: 14px; }
+
+/* Botón ✎ activo (panel abierto) */
+.btn-editar.activo{
+  background: var(--green-tint); border-color: var(--green); color: var(--green-dark);
+}
+
+@media (max-width: 480px){
+  .turno-edit-grid{ grid-template-columns: 1fr; }
+  .turno-edit-field.full{ grid-column: 1; }
+}
+
 </style>
 </head>
 <body>
@@ -1496,7 +1570,7 @@ input:focus-visible{
   <button class="tab-btn active" role="tab" data-tab="agenda" aria-selected="true">Agenda</button>
   <button class="tab-btn" role="tab" data-tab="balance" aria-selected="false">Balance</button>
   <button class="tab-btn" role="tab" data-tab="facturacion" aria-selected="false">Facturación</button>
-  <button class="tab-btn" role="tab" data-tab="infusiones" aria-selected="false">Infusiones / Dosis</button>
+  <button class="tab-btn" role="tab" data-tab="infusiones" aria-selected="false">Infusiones CRI</button>
 </nav>
 
 <main class="page">
@@ -1761,12 +1835,18 @@ input:focus-visible{
     <div class="form-card inf-card">
 
       <!-- Selector de fármaco -->
-      <div class="inf-farmacos">
-        <button class="inf-drug active" data-drug="propofol">Propofol</button>
-        <button class="inf-drug" data-drug="ketamina">Ketamina</button>
-        <button class="inf-drug" data-drug="dexmed">Dexmedetomidina</button>
-        <button class="inf-drug" data-drug="fentanilo">Fentanilo</button>
-        <button class="inf-drug" data-drug="remifentanilo">Remifentanilo</button>
+      <div class="field">
+        <label for="inf-drug-select">Fármaco</label>
+        <select id="inf-drug-select" class="inf-select inf-drug-select">
+          <option value="propofol">Propofol</option>
+          <option value="ketamina">Ketamina</option>
+          <option value="dexmed">Dexmedetomidina</option>
+          <option value="fentanilo">Fentanilo</option>
+          <option value="remifentanilo">Remifentanilo</option>
+          <option value="noradrenalina">Noradrenalina</option>
+          <option value="dopamina">Dopamina</option>
+          <option value="dobutamina">Dobutamina</option>
+        </select>
       </div>
 
       <div class="field-grid" style="margin-top:18px">
@@ -1790,8 +1870,14 @@ input:focus-visible{
         </div>
 
         <div class="field">
-          <label for="inf-mg">Fármaco en la dilución (mg)</label>
-          <input type="number" id="inf-mg" placeholder="Ej: 200" min="0" step="any">
+          <label for="inf-mg">Fármaco en la dilución</label>
+          <div class="inf-dosis-wrap">
+            <input type="number" id="inf-mg" placeholder="Ej: 200" min="0" step="any">
+            <select id="inf-mg-unidad" class="inf-select">
+              <option value="mg">mg</option>
+              <option value="mcg">µg</option>
+            </select>
+          </div>
         </div>
 
         <div class="field">
@@ -1801,7 +1887,10 @@ input:focus-visible{
 
       </div>
 
-      <button type="button" id="inf-calcular" class="btn-primary inf-btn">Calcular</button>
+      <div class="inf-btn-row">
+        <button type="button" id="inf-calcular" class="btn-primary inf-btn">Calcular</button>
+        <button type="button" id="inf-borrar" class="btn-ghost inf-btn-borrar">Limpiar</button>
+      </div>
 
     </div>
 
@@ -2112,17 +2201,59 @@ function renderTurnos() {
             ? `<button class="btn-revert" data-action="revert" data-id="${t.id}" title="Volver a programado">↺</button>`
             : `<div class="done-wrap">
                  <span class="pago-choice-label">Marcar cobrado:</span>
-                 <div class="cobro-monto">
-                   <span class="currency">$</span>
-                   <input type="number" class="cobro-input" data-cobro-for="${t.id}" value="${Number(t.honorarios) || 0}" min="0" step="0.01" aria-label="Honorario a cobrar">
-                 </div>
                  <div class="pago-direct">
                    <button class="pago-opt" data-action="done" data-pago="efectivo" data-id="${t.id}">Efectivo</button>
                    <button class="pago-opt" data-action="done" data-pago="transferencia" data-id="${t.id}">Transfer.</button>
                  </div>
                </div>`}
-          <button class="btn-editar" data-action="editar" data-id="${t.id}" aria-label="Editar turno" title="Editar turno">✎</button>
+          <button class="btn-editar" data-action="abrir-edicion" data-id="${t.id}" aria-label="Editar turno" title="Editar turno">✎</button>
           <button class="btn-delete" data-action="delete-turno" data-id="${t.id}" aria-label="Eliminar turno" title="Eliminar turno">✕</button>
+        </div>
+
+        <!-- Panel de edición inline (oculto hasta que se toca ✎) -->
+        <div class="turno-edit-panel" id="edit-panel-${t.id}" hidden>
+          <div class="turno-edit-grid">
+            <div class="turno-edit-field full">
+              <label>Procedimiento</label>
+              <input type="text" class="te-procedimiento" value="${escapeHtml(t.procedimiento)}" placeholder="Procedimiento">
+            </div>
+            <div class="turno-edit-field">
+              <label>Fecha</label>
+              <input type="date" class="te-fecha" value="${t.fecha}">
+            </div>
+            <div class="turno-edit-field">
+              <label>Hora (opcional)</label>
+              <input type="time" class="te-hora" value="${t.hora || ""}">
+            </div>
+            <div class="turno-edit-field full">
+              <label>Paciente</label>
+              <input type="text" class="te-paciente" value="${escapeHtml(t.paciente)}" placeholder="Nombre y especie">
+            </div>
+            <div class="turno-edit-field">
+              <label>Veterinaria / Clínica</label>
+              <input type="text" class="te-veterinaria" value="${escapeHtml(t.veterinaria || "")}" placeholder="Clínica">
+            </div>
+            <div class="turno-edit-field">
+              <label>Cirujano/a</label>
+              <input type="text" class="te-cirujano" value="${escapeHtml(t.cirujano || "")}" placeholder="Cirujano">
+            </div>
+            <div class="turno-edit-field">
+              <label>Anestesista</label>
+              <input type="text" class="te-anestesista" value="${escapeHtml(t.anestesista || "")}" placeholder="Anestesista">
+            </div>
+            <div class="turno-edit-field">
+              <label>Honorarios ($)</label>
+              <input type="number" class="te-honorarios" value="${Number(t.honorarios) || 0}" min="0">
+            </div>
+            <div class="turno-edit-field full">
+              <label>Notas</label>
+              <input type="text" class="te-notas" value="${escapeHtml(t.notas || "")}" placeholder="Notas opcionales">
+            </div>
+          </div>
+          <div class="turno-edit-actions">
+            <button class="btn-primary turno-edit-save" data-action="guardar-edicion" data-id="${t.id}">Guardar cambios</button>
+            <button class="btn-ghost turno-edit-cancel" data-action="cancelar-edicion" data-id="${t.id}">Cancelar</button>
+          </div>
         </div>
       </li>`;
   }).join("");
@@ -2226,14 +2357,47 @@ turnoListEl.addEventListener("click", (e) => {
 
   if (action === "done") {
     const pago = btn.dataset.pago;
-    // Tomar el honorario (posiblemente ajustado) del campo inline
-    const input = turnoListEl.querySelector(`.cobro-input[data-cobro-for="${id}"]`);
-    const honorarios = input ? (Number(input.value) || 0) : undefined;
-    const patch = { estado: "hecho", pago };
-    if (honorarios !== undefined) patch.honorarios = honorarios;
-    turnosStore.update(id, patch);
+    turnosStore.update(id, { estado: "hecho", pago });
     renderTurnos();
     showToast(`¡Cobrado en ${pago === "efectivo" ? "efectivo" : "transferencia"}! Sumado al balance`);
+  } else if (action === "abrir-edicion") {
+    // Abrir panel inline de edición
+    const panel = document.getElementById(`edit-panel-${id}`);
+    if (!panel) return;
+    // Cerrar cualquier otro panel abierto
+    document.querySelectorAll(".turno-edit-panel").forEach((p) => {
+      if (p !== panel) p.hidden = true;
+    });
+    panel.hidden = !panel.hidden;
+    // Resaltar el botón ✎ cuando está abierto
+    btn.classList.toggle("activo", !panel.hidden);
+    if (!panel.hidden) {
+      panel.querySelector(".te-procedimiento").focus();
+    }
+  } else if (action === "guardar-edicion") {
+    const panel = document.getElementById(`edit-panel-${id}`);
+    if (!panel) return;
+    const get = (cls) => panel.querySelector(cls)?.value.trim() || "";
+    const datos = {
+      fecha:        panel.querySelector(".te-fecha").value || todayISO(),
+      hora:         get(".te-hora"),
+      paciente:     get(".te-paciente"),
+      procedimiento:get(".te-procedimiento"),
+      veterinaria:  get(".te-veterinaria"),
+      cirujano:     get(".te-cirujano"),
+      anestesista:  get(".te-anestesista"),
+      honorarios:   Number(panel.querySelector(".te-honorarios").value) || 0,
+      notas:        get(".te-notas"),
+    };
+    turnosStore.update(id, datos);
+    renderTurnos();
+    showToast("Turno actualizado");
+  } else if (action === "cancelar-edicion") {
+    const panel = document.getElementById(`edit-panel-${id}`);
+    if (panel) panel.hidden = true;
+    // Quitar resaltado del botón ✎
+    const editBtn = turnoListEl.querySelector(`.btn-editar[data-id="${id}"]`);
+    if (editBtn) editBtn.classList.remove("activo");
   } else if (action === "editar") {
     iniciarEdicion(id);
   } else if (action === "revert") {
@@ -2683,13 +2847,13 @@ const DRUGS = {
   dexmed:        { nombre: "Dexmedetomidina",    unidad: "mcg_kg_h"   },
   fentanilo:     { nombre: "Fentanilo",          unidad: "mcg_kg_min" },
   remifentanilo: { nombre: "Remifentanilo",      unidad: "mcg_kg_min" },
+  noradrenalina: { nombre: "Noradrenalina",      unidad: "mcg_kg_min" },
+  dopamina:      { nombre: "Dopamina",           unidad: "mcg_kg_min" },
+  dobutamina:    { nombre: "Dobutamina",         unidad: "mcg_kg_min" },
 };
 
 let activeDrug = "propofol";
-let infHistorial = []; // cálculos de la sesión (no persistidos)
-
-// Refs a elementos
-const infDrugBtns  = document.querySelectorAll(".inf-drug");
+let infHistorial = [];
 const infPesoEl    = document.getElementById("inf-peso");
 const infDosisEl   = document.getElementById("inf-dosis");
 const infUnidadEl  = document.getElementById("inf-unidad");
@@ -2705,16 +2869,11 @@ const infHistList  = document.getElementById("inf-historial");
 const infLimpiarBtn= document.getElementById("inf-limpiar");
 
 // Selector de fármaco
-infDrugBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    infDrugBtns.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeDrug = btn.dataset.drug;
-    // Actualizar unidad sugerida
-    infUnidadEl.value = DRUGS[activeDrug].unidad;
-    // Limpiar resultado al cambiar fármaco
-    infResultado.hidden = true;
-  });
+const infDrugSelect = document.getElementById("inf-drug-select");
+infDrugSelect.addEventListener("change", () => {
+  activeDrug = infDrugSelect.value;
+  infUnidadEl.value = DRUGS[activeDrug].unidad;
+  infResultado.hidden = true;
 });
 
 // Convertir cualquier unidad a mcg/kg/min (base del cálculo)
@@ -2737,9 +2896,11 @@ function labelUnidad(unidad) {
   }[unidad] || unidad;
 }
 
-function calcCRI(peso, dosisValor, unidad, mgDil, volMl) {
+function calcCRI(peso, dosisValor, unidad, farmacoCantidad, farmacoUnidad, volMl) {
+  // Convertir la cantidad de fármaco a mcg según su unidad
+  const farmacoMcg = farmacoUnidad === "mcg" ? farmacoCantidad : farmacoCantidad * 1000;
   // 1. Concentración de la dilución en mcg/mL
-  const concMcgMl = (mgDil * 1000) / volMl;
+  const concMcgMl = farmacoMcg / volMl;
   // 2. Dosis en mcg/kg/min (base)
   const dosisBase = toMcgKgMin(dosisValor, unidad);
   // 3. mL/h = dosis_mcg_kg_min × kg × 60 / conc_mcg_mL
@@ -2751,16 +2912,19 @@ infCalcBtn.addEventListener("click", () => {
   const peso      = parseFloat(infPesoEl.value);
   const dosis     = parseFloat(infDosisEl.value);
   const unidad    = infUnidadEl.value;
-  const mgDil     = parseFloat(infMgEl.value);
+  const farmacoCantidad = parseFloat(infMgEl.value);
+  const farmacoUnidad   = document.getElementById("inf-mg-unidad").value;
   const volMl     = parseFloat(infVolEl.value);
 
   // Validación
-  if ([peso, dosis, mgDil, volMl].some((v) => isNaN(v) || v <= 0)) {
+  if ([peso, dosis, farmacoCantidad, volMl].some((v) => isNaN(v) || v <= 0)) {
     showToast("Completá todos los campos con valores válidos");
     return;
   }
 
-  const { mlh, concMcgMl } = calcCRI(peso, dosis, unidad, mgDil, volMl);
+  const { mlh, concMcgMl } = calcCRI(peso, dosis, unidad, farmacoCantidad, farmacoUnidad, volMl);
+
+  const unidadLabel = farmacoUnidad === "mcg" ? "µg" : "mg";
 
   // Mostrar resultado
   infMlhEl.textContent = mlh.toFixed(2);
@@ -2769,19 +2933,30 @@ infCalcBtn.addEventListener("click", () => {
     <span>${dosis} ${labelUnidad(unidad)}</span>
     <span>${peso} kg</span>
   `;
-  infConcEl.textContent = `Concentración de la dilución: ${concMcgMl.toFixed(2)} mcg/mL  (${mgDil} mg en ${volMl} mL)`;
+  infConcEl.textContent = `Concentración de la dilución: ${concMcgMl.toFixed(2)} mcg/mL  (${farmacoCantidad} ${unidadLabel} en ${volMl} mL)`;
   infResultado.hidden = false;
 
   // Guardar en historial de sesión
   infHistorial.unshift({
     id: uid(),
     farmaco: DRUGS[activeDrug].nombre,
-    peso, dosis, unidad, mgDil, volMl,
+    peso, dosis, unidad, farmacoCantidad, farmacoUnidad, volMl,
     mlh: mlh.toFixed(2),
     concMcgMl: concMcgMl.toFixed(2),
     hora: new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
   });
   renderHistorial();
+});
+
+// Botón limpiar: vacía los campos para calcular otra infusión
+document.getElementById("inf-borrar").addEventListener("click", () => {
+  infPesoEl.value = "";
+  infDosisEl.value = "";
+  infMgEl.value = "";
+  infVolEl.value = "";
+  infResultado.hidden = true;
+  infPesoEl.focus();
+  showToast("Campos limpiados");
 });
 
 function renderHistorial() {
